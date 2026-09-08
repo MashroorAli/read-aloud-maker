@@ -1,6 +1,7 @@
 credentials/
 uploads/
 outputs/
+inputs/
 __pycache__/
 *.pyc
 .env
