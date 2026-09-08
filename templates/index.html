@@ -2,14 +2,16 @@
 <html>
 <head>
     <title>Read Aloud Maker</title>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favlogo.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favlogo-lm.png') }}" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favlogo-dm.png') }}" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <header>
         <div class="brand">
-            <img src="{{ url_for('static', filename='snoopert.png') }}" alt="logo">
+            <img class="logo-light" src="{{ url_for('static', filename='favlogo-lm.png') }}" alt="logo">
+            <img class="logo-dark" src="{{ url_for('static', filename='favlogo-dm.png') }}" alt="logo">
             <h1>Read Aloud Maker</h1>
         </div>
         <p class="tagline">Upload a PDF test and get a spoken read-aloud, organized in your Google Drive.</p>

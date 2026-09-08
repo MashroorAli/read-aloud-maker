@@ -198,3 +198,16 @@ footer {
     color: #999;
     font-size: 12px;
 }
+
+.logo-dark {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .logo-light {
+        display: none;
+    }
+    .logo-dark {
+        display: inline;
+    }
+}
