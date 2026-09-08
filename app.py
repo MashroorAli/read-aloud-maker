@@ -20,11 +20,9 @@ if os.environ.get("FLASK_ENV") != "production":
 CLIENT_SECRETS_FILE = "credentials/oauth_client.json"
 REDIRECT_URI = os.environ.get("REDIRECT_URI", "http://127.0.0.1:5000/oauth2callback")
 
-# ***** oauth client config (for deployment) *****
-# Locally, this env var won't be set, so we fall back to reading the local
-# credentials/oauth_client.json file, same as before.
-# On Render, OAUTH_CLIENT_CONFIG holds the full client config JSON as a
-# single string, which we parse into a dict and use directly.
+os.makedirs("uploads", exist_ok=True)
+os.makedirs("outputs", exist_ok=True)
+
 OAUTH_CLIENT_CONFIG = os.environ.get("OAUTH_CLIENT_CONFIG")
 
 def get_oauth_flow(state=None):
@@ -49,11 +47,6 @@ SCOPES = [
     "openid"
     ]
 
-# ***** google cloud tts credentials (for deployment) *****
-# Locally, this env var won't be set, so tts_credentials stays None and
-# TextToSpeechClient() falls back to your local `gcloud auth` login.
-# On Render, GOOGLE_TTS_CREDENTIALS will hold the full service account JSON
-# as a single string, so we parse it and build credentials directly from it.
 GOOGLE_TTS_CREDENTIALS = os.environ.get("GOOGLE_TTS_CREDENTIALS")
 
 if GOOGLE_TTS_CREDENTIALS:
