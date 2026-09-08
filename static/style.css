@@ -177,6 +177,11 @@ button[type="submit"]:hover {
     z-index: 1000;
 }
 
+footer a {
+    color: inherit;
+    text-decoration: underline;
+}
+
 .spinner {
     border: 8px solid #444;
     border-top: 8px solid white;

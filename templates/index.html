@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html>
-    
 <head>
     <title>Read Aloud Maker</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favlogo-lm.png') }}" media="(prefers-color-scheme: light)">
@@ -12,8 +10,7 @@
 <body>
     <header>
         <div class="brand">
-            <img class="logo-light" src="{{ url_for('static', filename='favlogo-lm.png') }}" alt="logo">
-            <img class="logo-dark" src="{{ url_for('static', filename='favlogo-dm.png') }}" alt="logo">
+            <img src="{{ url_for('static', filename='snoopert.png') }}" alt="logo">
             <h1>Read Aloud Maker</h1>
         </div>
         <p class="tagline">Upload a PDF test and get a spoken read-aloud, organized in your Google Drive.</p>
@@ -76,7 +73,9 @@
 
     <div id="connection-data" data-connected="{{ is_connected | tojson }}"></div>
 
-    <footer>© Mashroor Ali</footer>
+    <footer>
+        © Mashroor Ali &middot; <a href="/privacy">Privacy Policy</a>
+    </footer>
 
     <script>
         window.addEventListener("pageshow", function(event) {
