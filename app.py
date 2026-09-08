@@ -19,6 +19,30 @@ if os.environ.get("FLASK_ENV") != "production":
 
 CLIENT_SECRETS_FILE = "credentials/oauth_client.json"
 REDIRECT_URI = os.environ.get("REDIRECT_URI", "http://127.0.0.1:5000/oauth2callback")
+
+# ***** oauth client config (for deployment) *****
+# Locally, this env var won't be set, so we fall back to reading the local
+# credentials/oauth_client.json file, same as before.
+# On Render, OAUTH_CLIENT_CONFIG holds the full client config JSON as a
+# single string, which we parse into a dict and use directly.
+OAUTH_CLIENT_CONFIG = os.environ.get("OAUTH_CLIENT_CONFIG")
+
+def get_oauth_flow(state=None):
+    if OAUTH_CLIENT_CONFIG:
+        client_config = json.loads(OAUTH_CLIENT_CONFIG)
+        return Flow.from_client_config(
+            client_config,
+            scopes=SCOPES,
+            state=state,
+            redirect_uri=REDIRECT_URI
+        )
+    else:
+        return Flow.from_client_secrets_file(
+            CLIENT_SECRETS_FILE,
+            scopes=SCOPES,
+            state=state,
+            redirect_uri=REDIRECT_URI
+        )
 SCOPES = [
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/userinfo.profile",
@@ -224,11 +248,7 @@ def upload_file():
 
 @app.route("/authorize")
 def authorize():
-    flow = Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE,
-        scopes = SCOPES,
-        redirect_uri = REDIRECT_URI
-    )
+    flow = get_oauth_flow()
 
     authorization_url, state = flow.authorization_url(
         access_type = "offline",
@@ -240,12 +260,7 @@ def authorize():
 
 @app.route("/oauth2callback")
 def oauth2callback():
-    flow = Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE,
-        scopes = SCOPES,
-        state = session["state"],
-        redirect_uri = REDIRECT_URI
-    )
+    flow = get_oauth_flow(state=session["state"])
 
     flow.code_verifier = session["code_verifier"]
     flow.fetch_token(authorization_response = request.url)
