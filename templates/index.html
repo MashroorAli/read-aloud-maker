@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Read Aloud Maker</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favlogo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <img src="{{ url_for('static', filename='snoopert.png') }}" alt="logo">
+            <h1>Read Aloud Maker</h1>
+        </div>
+        <p class="tagline">Upload a PDF test and get a spoken read-aloud, organized in your Google Drive.</p>
+
+        <div class="authorize-link">
+            {% if is_connected %}
+                <p>You are connected as: {{ user_name }}</p>
+                <a href="/logout">Disconnect</a>
+            {% else %}
+                <a href="/authorize" target="_blank">Connect your Google Drive here</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main>
+        <div class="upload-container">
+            <h2>Upload your file here</h2>
+            <p class="note">Note: this tool currently only supports single-column, multiple choice exam layouts. Two-column formats may not parse correctly.</p>
+
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="text" name="folder_name" placeholder="Name this read-aloud">
+                <input type="file" name="pdf_file">
+                <button type="submit">Press this to submit</button>
+            </form>
+        </div>
+
+        <div class="past-folders">
+            <h2>Your Previous Read-Alouds</h2>
+
+            {% if not is_connected %}
+                <p>Connect your Google Drive to view past read-alouds.</p>
+            {% elif not past_folders %}
+                <p>Upload a PDF to get your first read-aloud!</p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date Created</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for folder in past_folders %}
+                    <tr>
+                        <td>{{ folder.name }}</td>
+                        <td>{{ folder.createdTime }}</td>
+                        <td class="actions">
+                            <a href="https://drive.google.com/drive/folders/{{ folder.id }}" target="_blank">Open</a>
+                            <a href="/delete_folder/{{ folder.id }}" onclick="return confirm('Delete this read-aloud permanently?');">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </main>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Generating, please wait...</p>
+    </div>
+
+    <div id="connection-data" data-connected="{{ is_connected | tojson }}"></div>
+
+    <footer>© Mashroor Ali</footer>
+
+    <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                document.getElementById("loading-overlay").style.display = "none";
+            }
+        });
+
+        document.querySelector("form").addEventListener("submit", function() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        });
+
+        const isConnected = JSON.parse(document.getElementById("connection-data").dataset.connected);
+        if (!isConnected) {
+            setInterval(function() {
+                fetch("/connection_status")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.connected) {
+                            location.reload();
+                        }
+                    });
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

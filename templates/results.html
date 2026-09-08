@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Read Aloud Maker - Your Illustrious Google Drive Link</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+    <body>
+        <header>
+            <h1>Your read aloud has been successfully created. </h1>
+        </header>
+
+        <main>
+            <p>Press the link below to access the Google Drive folder:</p>
+            <a href="{{ folder_link }}" target="_blank" class="results-link">Open Google Drive Folder</a>    
+            <a href="/" class="results-link">Back to Home</a>
+
+        </main>
+
+    </body>
+
+</html>
