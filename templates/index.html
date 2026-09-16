@@ -31,7 +31,7 @@
             <p class="note">Note: this tool currently only supports single-column, multiple choice exam layouts. Two-column formats may not parse correctly.</p>
 
             <form action="/upload" method="post" enctype="multipart/form-data">
-                <input type="text" name="folder_name" placeholder="Name this read-aloud">
+                <input type="text" name="folder_name" placeholder="Enter your folder name here...">
                 <input type="file" name="pdf_file">
                 <button type="submit">Press this to submit</button>
             </form>
@@ -65,6 +65,11 @@
             {% endif %}
         </div>
     </main>
+
+    <section class="feedback-section">
+        <h2>Feedback &amp; Suggestions</h2>
+        <p>Have a question, ran into a bug, or want to see a new feature? Let us know <a href="https://tally.so/r/Xxp6j4" target="_blank" class="results-link">here.</a></p>
+    </section>
 
     <div id="loading-overlay">
         <div class="spinner"></div>
